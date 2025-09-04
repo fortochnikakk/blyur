@@ -1,4 +1,4 @@
-name: Deploy to Heroku
+name: Deploy to Yandex.Cloud
 
 on:
   push:
@@ -22,9 +22,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Deploy to Heroku
-        uses: akabab/heroku-deploy@v1
+      - name: Deploy to Yandex.Cloud
+        uses: yandex-cloud/action-yc@v1
         with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          service_account_id: ${{ secrets.YC_SERVICE_ACCOUNT_ID }}
+          folder_id: ${{ secrets.YC_FOLDER_ID }}
+          function_name: ${{ secrets.YC_FUNCTION_NAME }}
+          function_version: ${{ github.sha }}
+          function_runtime: python38
+          function_entrypoint: main.handler
+          function_memory: 128
+          function_timeout: 10
